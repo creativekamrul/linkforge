@@ -8,6 +8,15 @@ export const CONFIG_PATH =
   (process.env.CONFIG_PATH && process.env.CONFIG_PATH.trim()) ||
   path.join(process.cwd(), 'data', 'site.json');
 
+/**
+ * Config shipped inside the image. Used when CONFIG_PATH does not exist yet -
+ * which is exactly what happens when an empty host folder is bind-mounted over
+ * /app/data: a mount hides whatever the image had at that path.
+ */
+export const DEFAULT_CONFIG_PATH =
+  (process.env.DEFAULT_CONFIG_PATH && process.env.DEFAULT_CONFIG_PATH.trim()) ||
+  path.join(process.cwd(), 'defaults', 'site.json');
+
 /** Raised when the JSON file is missing, unparseable or fails validation. */
 export class ConfigError extends Error {
   file: string;
@@ -78,9 +87,42 @@ function formatIssues(issues: Array<{ path: Array<string | number>; message: str
   });
 }
 
+function exists(file: string): boolean {
+  try {
+    fs.accessSync(file, fs.constants.R_OK);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Prefers the real config, falls back to the seed that ships in the image and
+ * copies it into place once so the dashboard can start saving immediately. If
+ * the mount is read-only we still serve the seed instead of an error page.
+ */
+let seedAttempted = false;
+
+function readSource(): { file: string; seeded: boolean } {
+  if (exists(CONFIG_PATH)) return { file: CONFIG_PATH, seeded: false };
+  if (!exists(DEFAULT_CONFIG_PATH)) return { file: CONFIG_PATH, seeded: false };
+
+  if (!seedAttempted) {
+    seedAttempted = true;
+    try {
+      fs.copyFileSync(DEFAULT_CONFIG_PATH, CONFIG_PATH);
+      return { file: CONFIG_PATH, seeded: false };
+    } catch {
+      // Read-only mount or an unwritable folder: serve the seed anyway.
+    }
+  }
+  return { file: DEFAULT_CONFIG_PATH, seeded: true };
+}
+
 export function loadSite(): ResolvedSite {
-  const file = CONFIG_PATH;
-  const key = statKey(file);
+  const source = readSource();
+  const file = source.file;
+  const key = file + '|' + statKey(CONFIG_PATH) + '|' + statKey(DEFAULT_CONFIG_PATH);
   if (cache && cache.key === key) return cache.value;
 
   let text: string;
@@ -90,8 +132,9 @@ export function loadSite(): ResolvedSite {
     updatedAt = new Date(fs.statSync(file).mtimeMs).toISOString();
   } catch {
     throw new ConfigError(file, 'Config file not found', [
-      'No file at ' + file,
-      'Set CONFIG_PATH, or create data/site.json next to the app.',
+      'No file at ' + CONFIG_PATH,
+      'Mount a folder that already contains site.json, or let the app seed it from ' +
+        DEFAULT_CONFIG_PATH + '.',
     ]);
   }
 

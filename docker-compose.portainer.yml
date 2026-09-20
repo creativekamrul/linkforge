@@ -1,0 +1,40 @@
+# For Portainer (and any host where you would rather not bind-mount a folder).
+#
+# Why a named volume instead of ./data:
+#   - Docker seeds a named volume from the image, so site.json is present on the
+#     very first start, owned by the app user - the dashboard can save into it.
+#   - A bind mount points at an empty folder unless you create it yourself, and
+#     Docker creates that folder as root:root, which the non-root app user cannot
+#     write to. The app would start with no config at all.
+#
+# Point the Portainer stack at this file instead of docker-compose.yml:
+#   Compose path: docker-compose.portainer.yml
+services:
+  linkforge:
+    build: .
+    image: linkforge:latest
+    container_name: linkforge
+    restart: unless-stopped
+    ports:
+      - "${PORT:-3000}:${PORT:-3000}"
+    environment:
+      NODE_ENV: production
+      PORT: ${PORT:-3000}
+      CONFIG_PATH: /app/data/site.json
+      SITE_URL: ${SITE_URL:-http://localhost:3000}
+      TZ: ${TZ:-UTC}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
+      AUTH_SECRET: ${AUTH_SECRET:-}
+    volumes:
+      # Named volume: seeded from the image, writable by the app user.
+      - linkforge-data:/app/data
+    healthcheck:
+      test:
+        ["CMD-SHELL", "wget -qO- http://127.0.0.1:$${PORT:-3000}/api/health > /dev/null || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  linkforge-data:

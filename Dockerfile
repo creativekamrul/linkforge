@@ -34,6 +34,10 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 # Default content. Mount your own file here to override (no rebuild needed).
 COPY --from=builder --chown=nextjs:nodejs /app/data ./data
 
+# The same content again, outside the mount point: a bind mount over /app/data
+# hides the copy above, so the app falls back to this seed and copies it in.
+COPY --from=builder --chown=nextjs:nodejs /app/data ./defaults
+
 USER nextjs
 
 # The app listens on $PORT (default 3000) - set it with -e PORT=... at run time.

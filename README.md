@@ -296,9 +296,14 @@ sitemap, the vCard and the social preview tags.
 Create a **stack**, paste `docker-compose.yml`, then set these in the stack's
 *Environment variables* section: `PORT`, `SITE_URL`, `ADMIN_PASSWORD`, `AUTH_SECRET`.
 
-The dashboard writes back into `data/site.json`, so the `./data` bind mount needs a
-real host path - Portainer resolves relative paths against its own working directory.
-Use an absolute path, for example:
+**Use `docker-compose.portainer.yml` as the compose path** - it is the same stack with
+a named volume instead of a bind mount. Docker seeds a named volume from the image, so
+`site.json` is there on the first start and is owned by the app user, which means the
+dashboard can save into it.
+
+If you would rather keep the file on the host, use the default `docker-compose.yml` with
+an absolute path, because Portainer resolves relative paths against its own working
+directory:
 
 ```yaml
     volumes:
@@ -307,6 +312,10 @@ Use an absolute path, for example:
 
 Pick a port that is actually free on the Docker host before you deploy - the app will
 fail to start if something else already publishes it.
+
+Either way the app never comes up empty-handed: if the mounted folder has no
+`site.json`, it seeds one from the copy baked into the image at `/app/defaults/site.json`
+and carries on. You only see the config error screen if both are missing.
 
 Put it behind Caddy, Traefik or nginx for automatic HTTPS.
 
