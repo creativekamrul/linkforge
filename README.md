@@ -1,13 +1,15 @@
 # LinkForge
 
-A modern, elegant link page — a LinkStack alternative with a better default design, no
-database, and no admin dashboard. **Everything on the page comes from one JSON file.**
+A modern, elegant link page — a LinkStack alternative with a better default design,
+no database. **Everything on the page comes from one JSON file** - edited by hand or in the
+built-in dashboard.
 
 ```
 data/site.json   ←  edit this. reload the browser. done.
 ```
 
-No rebuild, no restart, no login. The container reads the file on every request.
+No rebuild, no restart. The container re-reads the file on every request, so a change is
+live the moment you refresh - whether it came from your editor or from the dashboard.
 
 ---
 
