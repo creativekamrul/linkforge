@@ -19,7 +19,7 @@ live the moment you refresh - whether it came from your editor or from the dashb
 
 ```bash
 docker compose up -d --build
-# open http://localhost:3000
+# open http://localhost:3000 - or whatever PORT you set in .env
 ```
 
 `docker-compose.yml` bind-mounts `./data` into the container, so editing
@@ -259,7 +259,8 @@ Deploy without compose:
 
 ```bash
 docker build -t linkforge .
-docker run -d --name linkforge -p 3000:3000 \
+docker run -d --name linkforge -p 8080:8080 \
+  -e PORT=8080 \
   -e SITE_URL=https://links.example.com \
   -v "$PWD/data:/app/data:ro" \
   linkforge
@@ -268,8 +269,44 @@ docker run -d --name linkforge -p 3000:3000 \
 | Env var | Default | Purpose |
 | --- | --- | --- |
 | `CONFIG_PATH` | `/app/data/site.json` | Where to read the config from |
-| `SITE_URL` | value of `site.url` in the JSON | Public URL used for OG tags, QR, sitemap |
-| `PORT` | `3000` | Host port in compose |
+| `SITE_URL` | value of `site.url` in the JSON | Public URL used for OG tags, QR, vCard, sitemap and robots. Set it to the address you actually browse, port included |
+| `PORT` | `3000` | The port the app listens on. Compose publishes it on the host *and* hands it to the app, so host and container always match - no port is hardcoded |
+
+### Changing the port
+
+`PORT` is the only place the port is written down. Compose publishes
+`${PORT}:${PORT}` and passes the same value into the container, into the app and into
+the healthcheck, so the app listens on exactly the port you published:
+
+```bash
+# .env
+PORT=8080
+SITE_URL=http://192.168.1.50:8080   # the address you actually browse
+```
+
+```bash
+docker compose up -d --build     # now on :8080, port 3000 is left alone
+```
+
+Keep `SITE_URL` and `PORT` in sync - `SITE_URL` is what ends up in the QR code, the
+sitemap, the vCard and the social preview tags.
+
+### With Portainer
+
+Create a **stack**, paste `docker-compose.yml`, then set these in the stack's
+*Environment variables* section: `PORT`, `SITE_URL`, `ADMIN_PASSWORD`, `AUTH_SECRET`.
+
+The dashboard writes back into `data/site.json`, so the `./data` bind mount needs a
+real host path - Portainer resolves relative paths against its own working directory.
+Use an absolute path, for example:
+
+```yaml
+    volumes:
+      - /opt/linkforge/data:/app/data
+```
+
+Pick a port that is actually free on the Docker host before you deploy - the app will
+fail to start if something else already publishes it.
 
 Put it behind Caddy, Traefik or nginx for automatic HTTPS.
 

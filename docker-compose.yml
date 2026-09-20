@@ -4,12 +4,15 @@ services:
     image: linkforge:latest
     container_name: linkforge
     restart: unless-stopped
+    # ${PORT} from your .env is used on BOTH sides of the mapping, so the app
+    # listens on exactly the port you publish. Nothing is pinned to 3000.
     ports:
-      - "${PORT:-3000}:3000"
+      - "${PORT:-3000}:${PORT:-3000}"
     environment:
       NODE_ENV: production
+      PORT: ${PORT:-3000}
       CONFIG_PATH: /app/data/site.json
-      SITE_URL: ${SITE_URL:-http://localhost:3000}
+      SITE_URL: ${SITE_URL:-http://localhost:${PORT:-3000}}
       TZ: ${TZ:-UTC}
       # Dashboard auth. Set both in .env (see .env.example).
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
@@ -18,7 +21,9 @@ services:
       # Read-write, because the dashboard saves your edits back into this file.
       - ./data:/app/data
     healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/api/health"]
+      # $$ is escaped so the container shell expands PORT, not compose.
+      test:
+        ["CMD-SHELL", "wget -qO- http://127.0.0.1:$${PORT:-3000}/api/health > /dev/null || exit 1"]
       interval: 30s
       timeout: 5s
       retries: 3
