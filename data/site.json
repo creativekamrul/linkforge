@@ -1,0 +1,195 @@
+{
+  "$schema": "./site.schema.json",
+
+  "site": {
+    "url": "https://links.kamrulinfo.com",
+    "language": "en"
+  },
+
+  "profile": {
+    "name": "Kamrul Islam",
+    "headline": "Full-Stack Developer & Mentor",
+    "tagline": "I build digital experiences that move people.",
+    "bio": "Engineer and mentor with 8 years across the stack. I turn ambitious ideas into fast, expressive products - React and Next.js on the front, Node, PHP and WordPress underneath. Currently CTO at FluxCredit Inc.",
+    "avatar": "/avatar.svg",
+    "location": "Dhaka, Bangladesh (remote)",
+    "email": "contact@kamrulinfo.com",
+    "verified": true,
+    "status": { "text": "Open to consulting & contract work" }
+  },
+
+  "theme": {
+    "preset": "midnight",
+    "card": "glass",
+    "radius": "xl",
+    "font": "inter",
+    "displayFont": "inter",
+    "backgroundStyle": "aurora",
+    "avatarRing": true,
+    "animations": true
+  },
+
+  "sections": ["profile", "stats", "links", "stack", "experience", "socials", "actions", "footer"],
+
+  "stats": [
+    { "value": "100+", "label": "projects shipped" },
+    { "value": "15+", "label": "countries mentored" },
+    { "value": "8 yrs", "label": "building for the web" }
+  ],
+
+  "links": [
+    {
+      "group": "Start here",
+      "label": "kamrulinfo.com",
+      "url": "https://kamrulinfo.com",
+      "description": "Portfolio, services and case studies",
+      "icon": "globe",
+      "badge": "Main site",
+      "featured": true
+    },
+    {
+      "group": "Start here",
+      "label": "Let's talk about your project",
+      "url": "mailto:contact@kamrulinfo.com",
+      "description": "contact@kamrulinfo.com - replies within a day",
+      "icon": "mail",
+      "badge": "Open",
+      "stack": ["React", "Next.js", "Node.js", "WordPress"]
+    },
+
+    {
+      "group": "Open source",
+      "label": "media-center",
+      "url": "https://github.com/creativekamrul/media-center",
+      "description": "Windows player for Navidrome & Audiobookshelf with synced lyrics",
+      "icon": "github",
+      "badge": "New",
+      "stack": ["Electron", "TypeScript", "MPV"]
+    },
+    {
+      "group": "Open source",
+      "label": "solodesk",
+      "url": "https://github.com/creativekamrul/solodesk",
+      "description": "Self-hosted CRM for freelancers: leads, outreach, invoicing",
+      "icon": "github",
+      "badge": "Docker",
+      "stack": ["Next.js", "Prisma", "PostgreSQL"]
+    },
+    {
+      "group": "Open source",
+      "label": "BentoTree",
+      "url": "https://bentotree-one.vercel.app",
+      "description": "Retro Linktree alternative built on a bento grid - live demo",
+      "icon": "code",
+      "badge": "Demo",
+      "stack": ["Next.js", "CSS Grid"]
+    },
+    {
+      "group": "Open source",
+      "label": "discord-radio",
+      "url": "https://github.com/creativekamrul/discord-radio",
+      "description": "Discord radio bot with a live web dashboard for queues and uploads",
+      "icon": "github",
+      "badge": "Bot",
+      "stack": ["Node.js", "Discord.js", "FFmpeg"]
+    },
+    {
+      "group": "Open source",
+      "label": "EMS Uni",
+      "url": "https://github.com/creativekamrul/ems-uni",
+      "description": "Employee and task management platform on React + Strapi",
+      "icon": "github",
+      "stack": ["React", "Strapi", "REST"]
+    }
+  ],
+
+  "stack": [
+    "HTML5",
+    "CSS3",
+    "JavaScript",
+    "TypeScript",
+    "React",
+    "Next.js",
+    "Redux",
+    "Node.js",
+    "Express",
+    "MongoDB",
+    "MySQL",
+    "Firebase",
+    "GraphQL",
+    "Tailwind CSS",
+    "Bootstrap",
+    "Sass",
+    "Gatsby",
+    "Git",
+    "Docker",
+    "WordPress",
+    "WooCommerce",
+    "Elementor",
+    "Strapi"
+  ],
+
+  "experience": [
+    {
+      "period": "2025 - Present",
+      "role": "Chief Technology Officer",
+      "company": "FluxCredit Inc.",
+      "summary": "Leading technology across the business: an industry CRM used by 1,000+ people, IT operations, web platforms and third-party integrations.",
+      "tags": ["CRM", "IT admin", "Integrations"]
+    },
+    {
+      "period": "2021 - Present",
+      "role": "Web Developer & Mentor",
+      "company": "Learnio",
+      "summary": "Building learning products used by 2,000 people daily, and mentoring students in more than 15 countries.",
+      "tags": ["React", "Next.js", "Mentoring"]
+    },
+    {
+      "period": "2020 - 2025",
+      "role": "Subcontract Web Developer",
+      "company": "TTMM",
+      "summary": "Delivered 40+ client projects with an agency, from film studios to government contractors.",
+      "tags": ["WordPress", "ACF", "Elementor"]
+    },
+    {
+      "period": "2018 - 2025",
+      "role": "Freelance Web Developer",
+      "company": "Self-employed",
+      "summary": "100+ projects shipped for a global client base: blogs, directories, dashboards and e-commerce.",
+      "tags": ["Full-stack", "E-commerce"]
+    }
+  ],
+
+  "socials": [
+    { "platform": "github", "url": "https://github.com/creativekamrul" },
+    { "platform": "linkedin", "url": "https://www.linkedin.com/in/kamrul-alif/" },
+    { "platform": "x", "url": "https://x.com/creativekamrul" },
+    { "platform": "email", "url": "mailto:contact@kamrulinfo.com" }
+  ],
+
+  "settings": {
+    "openLinksInNewTab": true,
+    "showShareButton": true,
+    "showQrCode": true,
+    "showSaveContact": true
+  },
+
+  "seo": {
+    "title": "Kamrul Islam - Full-Stack Developer",
+    "description": "Full-stack developer and mentor building fast, expressive digital products with React, Next.js, Node and WordPress.",
+    "keywords": [
+      "full-stack developer",
+      "react",
+      "next.js",
+      "node.js",
+      "wordpress",
+      "dhaka",
+      "freelance developer"
+    ]
+  },
+
+  "footer": {
+    "text": "© 2026 Kamrul Islam - Dhaka, Bangladesh",
+    "branding": false
+  }
+}

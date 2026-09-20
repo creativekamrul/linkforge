@@ -1,0 +1,386 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "LinkForge site configuration",
+  "description": "Every pixel on the page is generated from this file. Edit it and reload the browser - there is no rebuild and no restart step.",
+  "type": "object",
+  "required": ["profile"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Points editors at this schema so you get autocomplete and inline docs. Leave it alone."
+    },
+    "site": {
+      "type": "object",
+      "description": "Global settings for the deployment itself.",
+      "additionalProperties": false,
+      "properties": {
+        "url": {
+          "type": "string",
+          "description": "Public address of the deployed page. Used for Open Graph tags, the QR code, the sitemap and the vCard. Can also be set with the SITE_URL environment variable."
+        },
+        "language": {
+          "type": "string",
+          "default": "en",
+          "description": "Value of the <html lang> attribute, e.g. \"en\", \"bn\", \"de\"."
+        }
+      }
+    },
+    "profile": {
+      "type": "object",
+      "description": "Who the page belongs to. Only \"name\" is required.",
+      "required": ["name"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Display name, shown as the page heading. Required."
+        },
+        "headline": {
+          "type": "string",
+          "description": "One short line under the name, shown as a monospace kicker, e.g. your job title."
+        },
+        "tagline": {
+          "type": "string",
+          "description": "A bigger sentence under the headline, rendered in the serif display font. One line works best, e.g. \"I build digital experiences that move people.\""
+        },
+        "bio": {
+          "type": "string",
+          "description": "A sentence or two about you. Keep it to roughly 200 characters."
+        },
+        "avatar": {
+          "type": "string",
+          "description": "Image path or URL. Put files in the public/ folder and reference them as \"/my-photo.jpg\". Leave out to show your initials."
+        },
+        "location": {
+          "type": "string",
+          "description": "Shown as a small chip, e.g. \"Berlin, Germany\"."
+        },
+        "email": {
+          "type": "string",
+          "description": "Used only by the downloadable vCard (/vcard). Not shown on the page."
+        },
+        "verified": {
+          "type": "boolean",
+          "default": false,
+          "description": "Shows a small verified badge next to your name."
+        },
+        "status": {
+          "type": "object",
+          "description": "Optional live status chip: an emoji plus a few words.",
+          "required": ["text"],
+          "additionalProperties": false,
+          "properties": {
+            "emoji": { "type": "string", "description": "A single emoji, e.g. \"\ud83d\ude80\"." },
+            "text": { "type": "string", "description": "Short message, e.g. \"Open for freelance work\"." }
+          }
+        }
+      }
+    },
+    "theme": {
+      "type": "object",
+      "description": "Look and feel. Start from a preset, then override anything you like.",
+      "additionalProperties": false,
+      "properties": {
+        "preset": {
+          "type": "string",
+          "enum": [
+            "midnight",
+            "aurora",
+            "sunset",
+            "ocean",
+            "forest",
+            "mono",
+            "paper",
+            "terminal",
+            "cream"
+          ],
+          "default": "midnight",
+          "description": "Colour preset. terminal = ink background with lime + violet accents, cream = the light counterpart. midnight and mono are neutral dark; paper is light."
+        },
+        "mode": {
+          "type": "string",
+          "enum": ["dark", "light"],
+          "description": "Optional. Mostly inferred from how light your background colour is - set it only if you want to force it."
+        },
+        "accent": {
+          "type": "string",
+          "description": "Primary accent colour as a hex value, e.g. \"#7C5CFF\". Used for icons, badges and highlights."
+        },
+        "accent2": {
+          "type": "string",
+          "description": "Secondary accent colour. Blends with the primary in the featured link and the background glow."
+        },
+        "background": {
+          "type": "string",
+          "description": "Page background as a hex value, e.g. \"#0B0D17\"."
+        },
+        "text": {
+          "type": "string",
+          "description": "Main text colour as a hex value. Leave out to use the preset's default."
+        },
+        "card": {
+          "type": "string",
+          "enum": ["glass", "solid", "outline"],
+          "default": "glass",
+          "description": "How link cards are painted: frosted glass, solid panel, or just an outline."
+        },
+        "radius": {
+          "type": "string",
+          "enum": ["sm", "md", "lg", "xl", "2xl", "full"],
+          "default": "xl",
+          "description": "Corner rounding for cards. \"full\" makes everything pill shaped."
+        },
+        "font": {
+          "type": "string",
+          "enum": [
+            "inter",
+            "manrope",
+            "geist",
+            "plus-jakarta",
+            "space-grotesk",
+            "jetbrains-mono",
+            "playfair",
+            "dm-sans",
+            "instrument-serif"
+          ],
+          "default": "inter",
+          "description": "Body typeface, loaded from Google Fonts at runtime."
+        },
+        "displayFont": {
+          "type": "string",
+          "enum": [
+            "inter",
+            "manrope",
+            "geist",
+            "plus-jakarta",
+            "space-grotesk",
+            "jetbrains-mono",
+            "playfair",
+            "dm-sans",
+            "instrument-serif"
+          ],
+          "default": "inter",
+          "description": "Second face used for the profile tagline and the headline numbers - a serif here gives the page its editorial voice. Set it to the same value as font to use one typeface everywhere."
+        },
+        "backgroundStyle": {
+          "type": "string",
+          "enum": ["aurora", "mesh", "grid", "dots", "plain"],
+          "default": "aurora",
+          "description": "Decorative background: drifting colour blobs, a soft mesh gradient, a grid, dots, or nothing."
+        },
+        "avatarRing": {
+          "type": "boolean",
+          "default": true,
+          "description": "Draws a gradient ring around your avatar."
+        },
+        "animations": {
+          "type": "boolean",
+          "default": true,
+          "description": "Fade-in and hover motion. Turn off for a completely static page."
+        }
+      }
+    },
+    "links": {
+      "type": "array",
+      "description": "Your links, in the exact order you want them displayed.",
+      "items": {
+        "type": "object",
+        "required": ["label", "url"],
+        "additionalProperties": false,
+        "properties": {
+          "label": {
+            "type": "string",
+            "description": "The bold text on the card. Required."
+          },
+          "url": {
+            "type": "string",
+            "pattern": "^(https?://|mailto:|tel:|/)",
+            "description": "Where the card goes. Must start with https://, http://, mailto:, tel:, or / for a file in public/ (e.g. \"/resume.pdf\")."
+          },
+          "description": {
+            "type": "string",
+            "description": "Small grey line under the label. Keep it under about 70 characters for the tidiest result."
+          },
+          "stack": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Optional tech tags shown under the description, e.g. [\"Next.js\", \"Prisma\", \"PostgreSQL\"]. Rendered as small monospace chips."
+          },
+          "icon": {
+            "type": "string",
+            "description": "Icon name. Use a built-in name such as globe, link, briefcase, calendar, file, mail, cart, podcast, coffee, palette, code, video, camera, music, book, heart, star, map-pin, phone, download, play, rss, sparkles, zap, users, message, send, trophy, graduation, gift, image, shield. Brand icons work too, e.g. \"github\", \"spotify\", \"figma\", \"notion\"."
+          },
+          "badge": {
+            "type": "string",
+            "description": "Tiny pill next to the label, e.g. \"New\" or \"Free\"."
+          },
+          "group": {
+            "type": "string",
+            "description": "Heading for this link. Consecutive links sharing a group are listed under one heading, in the order they appear."
+          },
+          "featured": {
+            "type": "boolean",
+            "default": false,
+            "description": "Paints the card with your accent gradient to make it stand out. Use sparingly."
+          },
+          "openInNewTab": {
+            "type": "boolean",
+            "description": "Overrides the global settings.openLinksInNewTab for this one link."
+          }
+        }
+      }
+    },
+    "socials": {
+      "type": "array",
+      "description": "The row of round icon buttons under your links. Order is preserved.",
+      "items": {
+        "type": "object",
+        "required": ["platform", "url"],
+        "additionalProperties": false,
+        "properties": {
+          "platform": {
+            "type": "string",
+            "description": "Brand name, e.g. \"github\", \"x\", \"linkedin\", \"instagram\", \"youtube\", \"tiktok\", \"discord\", \"telegram\", \"whatsapp\", \"reddit\", \"dribbble\", \"behance\", \"mastodon\", \"bluesky\", \"threads\", \"spotify\", \"twitch\", \"medium\", \"substack\", \"patreon\", \"kofi\", \"buymeacoffee\", \"producthunt\", \"figma\", \"notion\", \"calendly\", \"stackoverflow\", \"codepen\", \"vimeo\", \"pinterest\", \"snapchat\", \"rss\". Use \"email\" for a mail icon. Unknown names fall back to a globe."
+          },
+          "url": {
+            "type": "string",
+            "pattern": "^(https?://|mailto:|tel:|/)",
+            "description": "Where the icon goes, e.g. \"https://github.com/you\" or \"mailto:you@example.com\"."
+          },
+          "label": {
+            "type": "string",
+            "description": "Accessible label and tooltip. Defaults to the brand name."
+          }
+        }
+      }
+    },
+    "stats": {
+      "type": "array",
+      "description": "Optional proof strip under the profile: a few numbers that say why you are worth trusting. Three items look best.",
+      "items": {
+        "type": "object",
+        "required": ["value", "label"],
+        "additionalProperties": false,
+        "properties": {
+          "value": {
+            "type": "string",
+            "description": "The big number, e.g. \"100+\". Kept as text so you can write \"8 yrs\" too."
+          },
+          "label": {
+            "type": "string",
+            "description": "What it counts, e.g. \"projects shipped\"."
+          }
+        }
+      }
+    },
+    "stack": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Your technology toolkit, rendered as chips with official brand icons, e.g. [\"React\", \"Next.js\", \"Node.js\", \"WordPress\"]. Names that have no brand icon fall back to a monogram, so anything is safe to list."
+    },
+    "experience": {
+      "type": "array",
+      "description": "Optional résumé timeline. Most recent role first.",
+      "items": {
+        "type": "object",
+        "required": ["role"],
+        "additionalProperties": false,
+        "properties": {
+          "role": {
+            "type": "string",
+            "description": "Job title, e.g. \"Chief Technology Officer\". Required."
+          },
+          "company": {
+            "type": "string",
+            "description": "Employer, e.g. \"FluxCredit Inc.\""
+          },
+          "period": {
+            "type": "string",
+            "description": "Dates as text, e.g. \"2025 - Present\"."
+          },
+          "summary": {
+            "type": "string",
+            "description": "One or two lines about what you owned and the outcome."
+          },
+          "tags": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Small chips, e.g. [\"React\", \"Mentoring\"]."
+          },
+          "url": {
+            "type": "string",
+            "pattern": "^(https?://|mailto:|tel:|/)",
+            "description": "Optional link on the job title."
+          }
+        }
+      }
+    },
+    "settings": {
+      "type": "object",
+      "description": "Which page controls are available to visitors.",
+      "additionalProperties": false,
+      "properties": {
+        "openLinksInNewTab": {
+          "type": "boolean",
+          "default": true,
+          "description": "Open external links in a new tab."
+        },
+        "showShareButton": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show the native Share button (on supported devices) and the Copy link button."
+        },
+        "showQrCode": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show a button that pops up a QR code for this page."
+        },
+        "showSaveContact": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show a button that downloads your details as a vCard."
+        }
+      }
+    },
+    "seo": {
+      "type": "object",
+      "description": "What search engines and social previews show. All optional - sensible values are derived from profile.",
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Browser tab and social preview title. Defaults to \"name - headline\"."
+        },
+        "description": {
+          "type": "string",
+          "description": "Meta description. Defaults to your bio."
+        },
+        "keywords": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Optional list of keywords, e.g. [\"designer\", \"freelance\"]."
+        },
+        "ogImage": {
+          "type": "string",
+          "description": "Image shown when the page is shared. Defaults to the avatar. Recommended size 1200x630."
+        }
+      }
+    },
+    "footer": {
+      "type": "object",
+      "description": "The small text at the very bottom.",
+      "additionalProperties": false,
+      "properties": {
+        "text": {
+          "type": "string",
+          "description": "Your own footer line, e.g. \"\u00a9 2026 Your Name\"."
+        },
+        "branding": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show a small \"Built with LinkForge\" credit. Set to false to remove it."
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,25 @@
+services:
+  linkforge:
+    build: .
+    image: linkforge:latest
+    container_name: linkforge
+    restart: unless-stopped
+    ports:
+      - "${PORT:-3000}:3000"
+    environment:
+      NODE_ENV: production
+      CONFIG_PATH: /app/data/site.json
+      SITE_URL: ${SITE_URL:-http://localhost:3000}
+      TZ: ${TZ:-UTC}
+      # Dashboard auth. Set both in .env (see .env.example).
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
+      AUTH_SECRET: ${AUTH_SECRET:-}
+    volumes:
+      # Read-write, because the dashboard saves your edits back into this file.
+      - ./data:/app/data
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s

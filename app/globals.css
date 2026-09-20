@@ -1,0 +1,306 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+   LinkForge design system. All colours, the body face and the display
+   face come from CSS variables generated out of data/site.json at
+   request time. Nothing here needs editing to change the look.
+   ------------------------------------------------------------------ */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--accent) 40%, transparent);
+}
+
+@keyframes lf-fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes lf-drift {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(2%, -3%, 0) scale(1.08); }
+}
+
+.lf-enter {
+  animation: lf-fade-up 720ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* --- typography helpers ------------------------------------------- */
+
+.lf-mono { font-family: var(--font-mono); }
+
+/* Section heading: monospace, uppercase, prefixed with an accent "#"
+   so each block reads like a commented config section. */
+.lf-kicker {
+  margin: 0 0 10px;
+  padding: 0 4px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.lf-kicker::before {
+  content: "# ";
+  color: var(--accent);
+  opacity: 0.85;
+}
+
+/* The big serif line under the name - the one editorial flourish. */
+.lf-tagline {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+.lf-stat-value {
+  font-family: var(--font-display);
+  font-size: 26px;
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+
+/* --- surfaces ----------------------------------------------------- */
+
+.lf-blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(70px);
+  opacity: 0.5;
+  animation: lf-drift 24s ease-in-out infinite;
+  will-change: transform;
+}
+
+.lf-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+[data-card="glass"] .lf-card {
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+}
+
+[data-card="solid"] .lf-card {
+  background: var(--surface-strong);
+  box-shadow: 0 18px 50px -30px rgba(0, 0, 0, 0.65);
+}
+
+[data-card="outline"] .lf-card {
+  background: transparent;
+}
+
+.lf-link {
+  transition: transform 240ms cubic-bezier(0.16, 1, 0.3, 1), border-color 240ms ease,
+    box-shadow 240ms ease, background-color 240ms ease;
+}
+
+.lf-link:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+  box-shadow: 0 14px 36px -18px var(--accent-glow);
+}
+
+.lf-link:active { transform: translateY(0) scale(0.995); }
+
+.lf-featured {
+  background-image: linear-gradient(118deg, var(--accent), var(--accent-2));
+  border-color: transparent !important;
+  color: #fff;
+  box-shadow: 0 18px 44px -20px var(--accent-glow);
+}
+
+.lf-featured:hover {
+  box-shadow: 0 22px 54px -18px var(--accent-glow);
+}
+
+.lf-icon-tile {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.lf-featured .lf-icon-tile {
+  background: rgba(255, 255, 255, 0.22);
+  color: #fff;
+}
+
+.lf-featured .lf-sub { color: rgba(255, 255, 255, 0.82); }
+
+.lf-avatar-ring {
+  background: conic-gradient(from 140deg, var(--accent), var(--accent-2), var(--accent));
+}
+
+.lf-chip {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 9999px;
+}
+
+.lf-focus:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* --- tech tags (on link cards, in the timeline) ------------------- */
+
+.lf-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 6px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.lf-featured .lf-tag {
+  border-color: rgba(255, 255, 255, 0.34);
+  color: rgba(255, 255, 255, 0.92);
+}
+
+/* --- tech stack chips --------------------------------------------- */
+
+.lf-stack-chip {
+  color: var(--muted);
+  transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1), border-color 200ms ease,
+    color 200ms ease, background-color 200ms ease;
+}
+
+.lf-stack-chip:hover {
+  transform: translateY(-2px);
+  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 50%, var(--border));
+  background: var(--accent-soft);
+}
+
+/* --- experience timeline ------------------------------------------ */
+
+.lf-timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 2px;
+}
+
+.lf-timeline-item {
+  position: relative;
+  margin-left: 3px;
+  padding: 0 0 20px 20px;
+  border-left: 1px solid var(--border);
+}
+
+.lf-timeline-item:last-child {
+  padding-bottom: 0;
+  border-left-color: transparent;
+}
+
+.lf-timeline-dot {
+  position: absolute;
+  left: -4.5px;
+  top: 4px;
+  height: 8px;
+  width: 8px;
+  border-radius: 9999px;
+  background: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+/* --- decorative backgrounds --------------------------------------- */
+
+.lf-grid-bg {
+  background-image: linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 46px 46px;
+}
+
+.lf-dots-bg {
+  background-image: radial-gradient(var(--grid-line) 1.2px, transparent 1.2px);
+  background-size: 22px 22px;
+}
+
+.lf-vignette {
+  background: radial-gradient(ellipse at 50% 0%, transparent 35%, var(--bg) 100%);
+}
+
+/* --- motion preferences ------------------------------------------- */
+
+[data-anim="off"] .lf-enter,
+[data-anim="off"] .lf-blob {
+  animation: none !important;
+}
+
+[data-anim="off"] .lf-stack-chip,
+[data-anim="off"] .lf-link {
+  transition: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lf-enter, .lf-blob { animation: none !important; }
+  .lf-link, .lf-stack-chip { transition: none !important; }
+  .lf-link:hover, .lf-stack-chip:hover { transform: none !important; }
+}
+
+/* --- discreet dashboard affordance -------------------------------- */
+
+.lf-edit {
+  position: fixed;
+  right: 14px;
+  bottom: 14px;
+  z-index: 40;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 9999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  padding: 6px 11px 6px 10px;
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--muted);
+  opacity: 0.3;
+  backdrop-filter: blur(10px);
+  transition: opacity 220ms ease, color 220ms ease, border-color 220ms ease,
+    transform 220ms ease;
+}
+
+.lf-edit:hover,
+.lf-edit:focus-visible {
+  opacity: 1;
+  color: var(--text);
+  border-color: var(--accent);
+  transform: translateY(-1px);
+  outline: none;
+}
+
+[data-anim="off"] .lf-edit {
+  transition: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lf-edit { transition: none !important; }
+  .lf-edit:hover, .lf-edit:focus-visible { transform: none !important; }
+}
